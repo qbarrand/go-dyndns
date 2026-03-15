@@ -1,0 +1,12 @@
+[general]
+# Resolver to used to determine the current IP addresses.
+resolver = "9.9.9.9:53"
+
+[provider]
+hostname = ""
+username = ""
+password = ""
+
+[domain."example.com"]
+ipv4 = true
+ipv6 = true

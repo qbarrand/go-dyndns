@@ -1,0 +1,8 @@
+[Unit]
+Description=Run go-dyndns every 5 minutes
+
+[Timer]
+OnCalendar=*-*-* *:00/5:00
+
+[Install]
+WantedBy=timers.target

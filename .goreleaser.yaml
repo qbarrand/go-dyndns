@@ -1,0 +1,45 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+
+# The lines below are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/need to use them.
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+project_name: go-dyndns
+
+version: 2
+
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+
+builds:
+  - binary: go-dyndns
+    env: [CGO_ENABLED=0]
+    goos: [linux]
+
+nfpms:
+  - maintainer: Quentin Barrand <quentin@quba.dev>
+    formats: [rpm]
+
+    scripts:
+      postinstall: "scripts/postinstall.sh"
+      preremove: "scripts/preremove.sh"
+      postremove: "scripts/postremove.sh"
+
+    contents:
+      - src: systemd/go-dyndns.service
+        dst: /usr/lib/systemd/system/go-dyndns.service
+
+      - src: systemd/go-dyndns.timer
+        dst: /usr/lib/systemd/system/go-dyndns.timer
+
+      - src: config.toml
+        dst: /etc/go-dyndns.toml
+        type: config|noreplace
+        file_info:
+          mode: 0600
+          owner: root
+          group: root
