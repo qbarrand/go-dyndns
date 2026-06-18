@@ -155,18 +155,30 @@ func main() {
 				}
 			}
 
-			update(ipv4)
+			if ipv4 == zero {
+				log.Print("Skipping IPv4 update")
+			} else {
+				if err = update(ipv4); err != nil {
+					log.Printf("Could not update the IPv4 record for %s: %v", domain, err)
+				}
+			}
 		}
 
 		if domainConfig.IPv6 {
 			if ipv6 == zero {
 				ipv6, err = getPublicIPv6()
 				if err != nil {
-					log.Fatalf("Could not get public IPv6 address for %s: %v; skipping IPv6 update", domain, err)
+					log.Printf("Could not get public IPv6 address for %s: %v; skipping IPv6 update", domain, err)
 				}
 			}
 
-			update(ipv6)
+			if ipv6 == zero {
+				log.Print("Skipping IPv6 update")
+			} else {
+				if err = update(ipv6); err != nil {
+					log.Printf("Could not update the IPv6 record for %s: %v", domain, err)
+				}
+			}
 		}
 	}
 }
